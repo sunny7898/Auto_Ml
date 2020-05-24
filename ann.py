@@ -27,10 +27,14 @@ def baseline_model():
 # build the model
 model = baseline_model()
 # Fit the model
-model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=5, batch_size=200, verbose=0)
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=5, batch_size=200, verbose=1)
 # Final evaluation of the model
-scores = model.evaluate(X_test, y_test, verbose=0)
-resfile = open("result.txt","w")
-resfile.write(str(scores[1]*100))
-print("Accuracy:  %.2f%%" % (scores[1]*100))
+scores = model.evaluate(x_test, y_test, verbose=1)
+print('Test loss:', scores[0])
+print('Test accuracy:', scores[1])
+accuracy=scores[1]*100
+file = open("accuracy.txt","w")
+file.write(str(accuracy))
+file.close()
+print("Accuracy:  %.2f%%" % (accuracy))
 model.save("mnist_model.h5")
