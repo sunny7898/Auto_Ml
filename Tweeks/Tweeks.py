@@ -17,7 +17,7 @@ y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
 num_classes = y_test.shape[1]
 # define baseline model
-def baseline_model(neuron):
+def base_model(neuron):
 	# create model
 	model = Sequential()
 	model.add(Dense(neuron, input_dim=num_pixels, kernel_initializer='normal', activation='relu'))
@@ -27,7 +27,7 @@ def baseline_model(neuron):
 	return model
 # build the model
 neuron = 5
-model = baseline_model(neuron)
+model = base_model(neuron)
 accuracy = 0
 def buildmodel():
     #Fit the model
@@ -50,7 +50,7 @@ def resetWeights():
 
 while accuracy < 99 and count < 4:
     print("Updating Model")
-    model = baseline_model(neuron * 2)
+    model = base_model(neuron * 2)
     neuron = neuron * 2
     count = count + 1
     accuracy = buildmodel()
@@ -62,7 +62,7 @@ while accuracy < 99 and count < 4:
 print()
 #reset weights
 print(best_neuron)
-model = baseline_model(best_neuron)
+model = base_model(best_neuron)
 buildmodel()
 model.save('updated.h5')
 print('model saved')
