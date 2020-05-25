@@ -48,7 +48,7 @@ def resetWeights():
     w = [[j*0 for j in i] for i in w]
     model.set_weights(w)
 
-while accuracy < 99 and count < 4:
+while accuracy < 99 and count < 6:
     print("Updating Model")
     model = base_model(neuron * 2)
     neuron = neuron * 2
