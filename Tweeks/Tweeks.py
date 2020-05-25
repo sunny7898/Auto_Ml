@@ -1,71 +1,102 @@
-# Baseline MLP for MNIST dataset
-from keras.datasets import mnist
+from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, Dropout, Activation, Flatten
+from keras.layers import Conv2D, MaxPooling2D, ZeroPadding2D
+from keras.layers.normalization import BatchNormalization
+from keras.regularizers import l2
+from keras.datasets import mnist
 from keras.utils import np_utils
-# load data
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
-# flatten 28*28 images to a 784 vector for each image
-num_pixels = X_train.shape[1] * X_train.shape[2]
-X_train = X_train.reshape((X_train.shape[0], num_pixels)).astype('float32')
-X_test = X_test.reshape((X_test.shape[0], num_pixels)).astype('float32')
-# normalize inputs from 0-255 to 0-1
-X_train = X_train / 255
-X_test = X_test / 255
-# one hot encode outputs
+import keras
+
+# loads the MNIST dataset
+(x_train, y_train), (x_test, y_test)  = mnist.load_data()
+
+# Lets store the number of rows and columns
+img_rows = x_train[0].shape[0]
+img_cols = x_train[1].shape[0]
+
+# Getting our date in the right 'shape' needed for Keras
+# We need to add a 4th dimenion to our date thereby changing our
+# Our original image shape of (60000,28,28) to (60000,28,28,1)
+x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+
+# store the shape of a single image 
+input_shape = (img_rows, img_cols, 1)
+
+# change our image type to float32 data type
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+
+# Normalize our data by changing the range from (0 to 255) to (0 to 1)
+x_train /= 255
+x_test /= 255
+
+# Now we one hot encode outputs
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
+
 num_classes = y_test.shape[1]
-# define baseline model
-def base_model(neuron):
-	# create model
-	model = Sequential()
-	model.add(Dense(neuron, input_dim=num_pixels, kernel_initializer='normal', activation='relu'))
-	model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax'))
-	# Compile model
-	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-	return model
-# build the model
-neuron = 5
-model = base_model(neuron)
-accuracy = 0
-def buildmodel():
-    #Fit the model
-    model.fit(X_train,y_train,validation_data = (X_test,y_test),epochs = 5, batch_size = 200, verbose = 0)
-    #Final evalutationof the model
-    scores = model.evaluate(X_test, y_test, verbose=0)
-    accuracy = scores[1]*100
-    print("Accuracy: %.2f%" , (scores[1]*100))
-    return accuracy
-buildmodel()
-count = 0
-best_acc = accuracy
-best_neuron = 0
+num_pixels = x_train.shape[1] * x_train.shape[2]
+accuracy=0
+conv=1
+cnt=0
+epochs=2
+while True:
+    cnt+=1
+    # create model
+    model = Sequential()
 
-def resetWeights():
-    print("Resetting weights")
-    w = model.get_weights()
-    w = [[j*0 for j in i] for i in w]
-    model.set_weights(w)
+    #sets of CRP (Convolution, RELU, Pooling)
+    for x in range(conv):
+        model.add(Conv2D(20, (5, 5),
+                        padding = "same", 
+                        input_shape = input_shape))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size = (2, 2), strides = (2, 2)))
 
-while accuracy < 99 and count < 6:
-    print("Updating Model")
-    model = base_model(neuron * 2)
-    neuron = neuron * 2
-    count = count + 1
-    accuracy = buildmodel()
-    if best_acc < accuracy:
-        best_acc = accuracy
-        best_neuron = neuron
-    print()
-    resetWeights()
-print()
-#reset weights
-print(best_neuron)
-model = base_model(best_neuron)
-buildmodel()
-model.save('updated.h5')
-print('model saved')
-file1 = open("result.txt","w")
-file1.write(str(best_acc))
-file1.close()
+    # Fully connected layers (w/ RELU)
+    model.add(Flatten())
+    model.add(Dense(500))
+    model.add(Activation("relu"))
+
+    # Softmax (for classification)
+    model.add(Dense(num_classes))
+    model.add(Activation("softmax"))
+            
+    model.compile(loss = 'categorical_crossentropy',
+                optimizer = keras.optimizers.Adadelta(),
+                metrics = ['accuracy'])
+        
+    print(model.summary())
+
+    # Training Parameters
+    batch_size = 128
+
+    history = model.fit(x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(x_test, y_test),
+            shuffle=True)
+
+    model.save("mnist_LeNet.h5")
+
+    # Evaluate the performance of our trained model
+    scores = model.evaluate(x_test, y_test, verbose=1)
+    print('Test loss:', scores[0])
+    print('Test accuracy:', scores[1])
+    accuracy=scores[1]
+    print(accuracy)
+    if accuracy < 0.985 and cnt<2:
+        conv+=1
+        continue
+    elif accuracy < 0.985 :
+        epochs+=1
+    else:
+        break 
+
+file = open("accuracy.txt","w")
+file.write(str(scores[1]*100))
+file.close()
+
+model.save("mnist_LeNet_correct.h5")
