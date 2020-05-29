@@ -41,28 +41,28 @@ This job will run after job 1.
 
 By looking at the code or program file, Jenkins will automatically start the respective dockerfile and start training.
 
-![](Images/Screenshot (443).png)
+![](Images/Screenshot_443.png)
 
 
-![](Images/Screenshot (444).png)
+![](Images/Screenshot_444.png)
 
 
 # Job 3 :
 
 It will run the model, and will display the accuracy and will trigger the next job.
 
-![](Images/Screenshot (440).png)
+![](Images/Screenshot_440.png)
 
 # Job 4 :
 
 If the accuracy of the model is correct, this job will send a mail to the admin, that the best model is created.
 
-![](Images/Screenshot (446).png)
+![](Images/Screenshot_446.png)
 
 
 Output if accuracy is correct: 
 
-![](Images/Screenshot (440).png)
+![](Images/Screenshot_440.png)
 
 
 Otherwise next job will be triggerred
