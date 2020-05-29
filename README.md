@@ -51,11 +51,13 @@ By looking at the code or program file, Jenkins will automatically start the res
 
 It will run the model, and will display the accuracy and will trigger the next job.
 
-![](Images/Screenshot_440.png)
+![](Images/j3.png)
+
 
 # Job 4 :
 
 If the accuracy of the model is correct, this job will send a mail to the admin, that the best model is created.
+
 
 ![](Images/Screenshot_446.png)
 
@@ -67,14 +69,16 @@ Output if accuracy is correct:
 
 Otherwise next job will be triggerred
 
+![](Images/j4.png)
 
 
 # Job 5:
 
-This job will run the Ttweeks.py file in which which the model is tweeked with some changes. It keeps on running till the time model doesnot achieve atleast the treshold accuracy.
+This job will run the Tweeks.py file in which which the model is tweeked with some changes. It keeps on running till the time model doesnot achieve atleast the treshold accuracy.
 
 
 ![](Images/Screenshot_447.png)
+
 
 
 After the best model is created a mail will be sent to the admin that the best model is created.
