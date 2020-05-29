@@ -33,7 +33,7 @@ You can also create a hook to automatically push it to github while commiting.
 # Job 1 : 
 This will pull the code from github as soon as it is uploaded and copy it to the directory specified.
 
-![](Images/Screenshot (442).png)
+![](Images/Screenshot_442.png)
 
 # Job 2 : 
 
