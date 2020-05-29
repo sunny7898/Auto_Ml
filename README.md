@@ -74,7 +74,7 @@ Otherwise next job will be triggerred
 This job will run the Ttweeks.py file in which which the model is tweeked with some changes. It keeps on running till the time model doesnot achieve atleast the treshold accuracy.
 
 
-![](Images/Screenshot (447).png)
+![](Images/Screenshot_447.png)
 
 
 After the best model is created a mail will be sent to the admin that the best model is created.
