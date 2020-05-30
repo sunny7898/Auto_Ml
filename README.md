@@ -27,6 +27,8 @@ Notify that the best model is being created
 1. Upload your Machine learning code to gitHub by commiting to local git 
 You can also create a hook to automatically push it to github while commiting.
 
+![](Images/01.png)
+
 ![](Images/1.png)
 
 2. After this create a docker file in redhat and install your requirements in it.
