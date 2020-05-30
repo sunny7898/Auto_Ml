@@ -11,11 +11,16 @@ Problem Statement:
 
 5.	 Job2 : By looking at the code or program file, Jenkins should automatically start the respective machine learning software installed interpreter install image container to deploy code  and start training( eg. If code uses CNN, then Jenkins should start the container that has already installed all the softwares required for the cnn processing).
 
-7.	Job3 : if metrics accuracy is less than 99%  , then tweak the machine learning model architecture and retrain it.
+7.	Job3 : Run the model and display the accuracy.
 
-8.	Job4: Notify that the best model is being created
+8.	Job4: if metrics accuracy is less than 99%, then tweak the machine learning model architecture and retrain it.
+Notify that the best model is being created
 
-9.	Create one extra job job5 for monitor - if the model was not trained due to some reason then it will be trained again.
+9. job5: Run the tweak file till the model gets an accuracy atleast as that required by threshold. After recieving the accuracy sent a mail to the admin that the best model is created.
+
+10.	Create one extra  job6 for monitor - if the model was not trained due to some reason then it will be trained again.
+
+
 
 # Steps:
 
@@ -51,11 +56,13 @@ By looking at the code or program file, Jenkins will automatically start the res
 
 It will run the model, and will display the accuracy and will trigger the next job.
 
-![](Images/Screenshot_440.png)
+![](Images/j3.png)
+
 
 # Job 4 :
 
-If the accuracy of the model is correct, this job will send a mail to the admin, that the best model is created.
+If the accuracy of the model is correct, this job will send an email to the admin, that the best model is created.
+
 
 ![](Images/Screenshot_446.png)
 
@@ -67,18 +74,33 @@ Output if accuracy is correct:
 
 Otherwise next job will be triggerred
 
+![](Images/j4.png)
 
 
 # Job 5:
 
-This job will run the Ttweeks.py file in which which the model is tweeked with some changes. It keeps on running till the time model doesnot achieve atleast the treshold accuracy.
+This job will run the Tweeks.py file in which which the model is tweeked with some changes. It keeps on running till the time model doesnot achieve atleast the threshold accuracy.
 
 
 ![](Images/Screenshot_447.png)
+
 
 
 After the best model is created a mail will be sent to the admin that the best model is created.
 
 
 
-And your task is completed !!!!!
+# Job 6 :
+
+
+In this, i have used the concept of exit code to monitor if 
+
+a. The container is running properly
+b. The model is trained Successfullyl
+
+In a case of failure respective jobs will be re-triggered using this job
+
+![](Images/Screenshot_451.png)
+
+
+And The Task is completed !!!!!
